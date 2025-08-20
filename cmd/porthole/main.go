@@ -18,7 +18,7 @@ func showUsage() {
 func main() {
 	var (
 		showVersion = flag.Bool("version", false, "show version information")
-		showHelp	= flag.Bool("help", false, "show help information")
+		showHelp    = flag.Bool("help", false, "show help information")
 	)
 	flag.Parse()
 
@@ -39,5 +39,5 @@ func main() {
 	if len(args) == 0 {
 		showUsage()
 		return
-	}	
+	}
 }
