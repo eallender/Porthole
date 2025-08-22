@@ -32,13 +32,33 @@ func Execute() {
 	}
 }
 
+var config string
+var network string
+var output string
 var logLevel string
-var cfgFile string
+var quiet bool
+var verbose bool
+var logFile string
+var dryRun bool
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&logLevel, "log-level", "l", "info", `Set the logging level ("debug", "info", "warn", "error") (default "info")`)
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "file", "f", "", "config file (default is $HOME/.Porthole.yaml)")
+	// Config and Env
+	rootCmd.PersistentFlags().StringVarP(&config, "config", "c", "$HOME/.Porthole.yaml", "WIP: Config file (default is $HOME/.Porthole.yaml)") //TODO Implement
+	rootCmd.PersistentFlags().StringVar(&network, "network", "", "WIP: Select the network to validate")                                        //TODO Implement
 
+	// Output and Logging
+	rootCmd.PersistentFlags().StringVarP(&output, "output", "o", "", "WIP: Output file path") //TODO Implement
+	rootCmd.PersistentFlags().StringVarP(&logLevel, "log-level", "l", "info", `Set the logging level ("debug", "info", "warn", "error") (default "info")`)
+	rootCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "WIP: Suppress the output") //TODO Implement
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "WIP: Verbose output")  //TODO Implement
+	rootCmd.PersistentFlags().StringVar(&logFile, "log-file", "", "WIP: Write logs to file")    //TODO Implement
+
+	// Runtime
+	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "WIP: Show function without execution") //TODO Implement
+
+	rootCmd.MarkFlagsMutuallyExclusive("quiet", "verbose")
+	rootCmd.MarkFlagsMutuallyExclusive("quiet", "log-level")
+	rootCmd.MarkFlagsMutuallyExclusive("verbose", "log-level")
 	cobra.OnInitialize(setupLogger)
 }
 

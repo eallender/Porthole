@@ -3,6 +3,7 @@ VERSION 0.8
 all:
     BUILD +test
     BUILD +lint
+    BUILD +docs
     BUILD +build-all
 
 golang:
@@ -22,9 +23,9 @@ build:
     ARG GOARCH=amd64
     ARG VERSION=dev
     RUN CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build \
-        -ldflags="-w -s -X main.version=$VERSION" \
+        -ldflags="-w -s -X cmd.version=$VERSION" \
         -o porthole-$GOOS-$GOARCH \
-        ./cmd/porthole
+        ./cmd
     SAVE ARTIFACT porthole-$GOOS-$GOARCH AS LOCAL bin/porthole-$GOOS-$GOARCH
 
 build-all:
@@ -44,4 +45,11 @@ lint:
     COPY . .
     RUN go vet ./...
     RUN staticcheck ./...
+
+docs:
+    FROM +deps
+    COPY . .
+    RUN mkdir -p docs/commands docs/man
+    RUN go run main.go generate-docs
+    SAVE ARTIFACT docs/* AS LOCAL docs/
 
